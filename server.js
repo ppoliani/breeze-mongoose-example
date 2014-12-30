@@ -12,7 +12,6 @@ var init = require('./config/init')(),
  * Please note that the order of loading is important.
  */
 
-;
 
 // Init the express application
 var app = require('./config/express')(dbManager.init(config));

@@ -1,22 +1,40 @@
 'use strict';
 
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles',
-	function($scope, $stateParams, $location, Authentication, Articles) {
+angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'breezeService',
+	function($scope, $stateParams, $location, Authentication, breezeService) {
 		$scope.authentication = Authentication;
 
 		$scope.create = function() {
-			var article = new Articles({
+			var entityManager = breezeService.entityManager,
+			article = {
 				title: this.title,
 				content: this.content
-			});
-			article.$save(function(response) {
-				$location.path('articles/' + response._id);
+			};
 
-				$scope.title = '';
-				$scope.content = '';
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
+			entityManager.createEntity("Article", article);
+			entityManager.saveChanges()
+				.then(function(response){
+					$location.path('articles/' + response._id);
+					$scope.title = '';
+					$scope.content = '';
+				})
+				.catch(function(err){
+					console.error(err);
+				});
+
+
+			// var article = new Articles({
+			// 	title: this.title,
+			// 	content: this.content
+			// });
+			// article.$save(function(response) {
+			// 	$location.path('articles/' + response._id);
+
+			// 	$scope.title = '';
+			// 	$scope.content = '';
+			// }, function(errorResponse) {
+			// 	$scope.error = errorResponse.data.message;
+			// });
 		};
 
 		$scope.remove = function(article) {

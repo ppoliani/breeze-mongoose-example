@@ -4,7 +4,7 @@
 	function breezeService($http, breeze, jsonResultsAdapterService){
 		 // region Consts
 
-        var SERVICE_ENDPOINT = 'http://localhost:3000',
+        var SERVICE_ENDPOINT = '/',
         	METADATA_ENDPOINT = SERVICE_ENDPOINT + 'breeze/metadata';
 
         // endregion
@@ -101,12 +101,11 @@
         function init(){
 	        _readMetadata()
 	            .success(function(metadata){
-	                logger.info('Metadata Loaded');
 	                _metadata = metadata;
 	                _configBreeze();
 	            })
 	            .error(function(msg){
-	                logger.error('An error occured' + msg);
+	                console.error('An error occured' + msg);
 	            });
         }        
 
@@ -126,10 +125,18 @@
 
         // endregion
 
-        return {
+        var publicApi =  {
         	init: init,
             createEntity: createEntity
-        }
+        };
+
+        Object.defineProperty(publicApi, 'entityManager', {
+            get: function get() {
+                return _entityManager;
+            }
+        });
+
+        return publicApi;
 	}
 
 	angular.module('data').service('breezeService', [
