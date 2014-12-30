@@ -4,8 +4,8 @@
 	function breezeService($http, breeze, jsonResultsAdapterService){
 		 // region Consts
 
-        var METADATA_ENDPOINT = SERVICE_ENDPOINT + 'breeze/metadata'.
-        	SERVICE_ENDPOINT = 'http://localhost:3000';
+        var SERVICE_ENDPOINT = 'http://localhost:3000',
+        	METADATA_ENDPOINT = SERVICE_ENDPOINT + 'breeze/metadata';
 
         // endregion
 
@@ -27,7 +27,6 @@
         function _configBreeze(){
             _customizeAjaxAdapter();
             _entityManager = _createEntityManager();
-            _registerCustomCtors();
         }
 
         /**
@@ -71,23 +70,12 @@
             });
         }
 
-        /**
-         * Registers custom constructors for our models
-         * @private
-         */
-        function _registerCustomCtors(){
-            var store = _entityManager.metadataStore;
-
-            for(var model in modelSet){
-                store.registerEntityTypeCtor(model, modelSet[model]);
-            }
-        }
 
         /**
          * Creates a custom naming convention
          * @private
          */
-         function _getCustomNamingConvention(){
+         function _getCustomNamingConvention() {
             var toCamelCase = function(propertyName){
                 return propertyName.charAt(0).toLowerCase() + propertyName.slice(1);
             };
@@ -147,7 +135,7 @@
 	angular.module('data').service('breezeService', [
             '$http',
             'breeze',
-            'jsonResultsAdapterService'
+            'jsonResultsAdapterService',
             breezeService
 		]);
 })(angular);
