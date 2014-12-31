@@ -47,7 +47,7 @@
         function _getEntityTypeAlt(resourceName){
             // ToDo: Find a better solution to map the resource name to entity name
             switch(resourceName){
-                case 'articles':
+                case 'Articles':
                     return 'Article';
             }
         }

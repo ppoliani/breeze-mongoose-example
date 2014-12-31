@@ -2,11 +2,12 @@
 
 angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'breezeService',
 	function($scope, $stateParams, $location, Authentication, breezeService) {
+		var entityManager = breezeService.entityManager;
+
 		$scope.authentication = Authentication;
 
 		$scope.create = function() {
-			var entityManager = breezeService.entityManager,
-			article = {
+			var article = {
 				title: this.title,
 				content: this.content
 			};
@@ -14,27 +15,13 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			entityManager.createEntity("Article", article);
 			entityManager.saveChanges()
 				.then(function(response){
-					$location.path('articles/' + response._id);
+					$location.path('articles/' + response.entities[0].id);
 					$scope.title = '';
 					$scope.content = '';
 				})
 				.catch(function(err){
 					console.error(err);
 				});
-
-
-			// var article = new Articles({
-			// 	title: this.title,
-			// 	content: this.content
-			// });
-			// article.$save(function(response) {
-			// 	$location.path('articles/' + response._id);
-
-			// 	$scope.title = '';
-			// 	$scope.content = '';
-			// }, function(errorResponse) {
-			// 	$scope.error = errorResponse.data.message;
-			// });
 		};
 
 		$scope.remove = function(article) {
@@ -64,13 +51,26 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 		};
 
 		$scope.find = function() {
-			$scope.articles = Articles.query();
+			var q = breeze.EntityQuery
+				.from('Articles');
+
+			entityManager.executeQuery(q)
+				.then(function(response){
+					$scope.articles = response.results;
+				})
+				.catch(function(err){
+					console.error(err);
+				});
 		};
 
 		$scope.findOne = function() {
-			$scope.article = Articles.get({
-				articleId: $stateParams.articleId
-			});
+			entityManager.fetchEntityByKey('Article', $stateParams.articleId, true)
+				.then(function(article){
+					$scope.article = article;
+				})
+				.catch(function(err){
+					console.error(err);
+				})
 		};
 	}
 ]);

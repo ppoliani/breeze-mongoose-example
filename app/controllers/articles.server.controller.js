@@ -79,7 +79,7 @@ exports.list = function(req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.json(articles);
+			res.json({ items: articles });
 		}
 	});
 };
