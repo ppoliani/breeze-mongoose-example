@@ -29,6 +29,15 @@ var ArticleSchema = new Schema({
 		type: Schema.ObjectId,
 		ref: 'User'
 	}
+}); 
+
+ArticleSchema.virtual('id').get(function(){
+    return this._id.toHexString();
+});
+
+// Ensure virtual fields are serialised.
+ArticleSchema.set('toJSON', {
+    virtuals: true
 });
 
 mongoose.model('Article', ArticleSchema);

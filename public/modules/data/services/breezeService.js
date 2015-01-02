@@ -27,6 +27,7 @@
         function _configBreeze(){
             _customizeAjaxAdapter();
             _entityManager = _createEntityManager();
+            _registerCustomCtors();
         }
 
         /**
@@ -120,6 +121,14 @@
             }
 
             return _entityManager.createEntity(type, value);
+        }
+
+        /**
+         * Registers custom constructors for our models
+         * @private
+         */
+        function _registerCustomCtors(){
+            var store = _entityManager.metadataStore;
         }
 
 
