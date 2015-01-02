@@ -10,7 +10,7 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 			var article = {
 				title: this.title,
 				content: this.content,
-				user : $scope.authentication.user._id,
+				userID : $scope.authentication.user._id,
 				created: new Date()
 			};
 
